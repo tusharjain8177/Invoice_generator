@@ -28,7 +28,8 @@ def generate_invoice():
         template_path = 'Template.jpeg'  # Replace with your template image path
         img = Image.open(template_path)
         draw = ImageDraw.Draw(img)
-        font = ImageFont.load_default()
+        font = ImageFont.truetype('arial.ttf', size=20)  # Replace 'arial.ttf' with your font file and adjust size
+
 
         # Map data to positions on the template
         draw.text((300, 440), f"{invoice_number}", fill="black", font=font)
