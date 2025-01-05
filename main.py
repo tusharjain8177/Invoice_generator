@@ -9,9 +9,11 @@ app = Flask(__name__)
 TEMPLATE_DIR = 'templates/invoice_templates'
 os.makedirs(TEMPLATE_DIR, exist_ok=True)
 
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
 
 @app.route('/generate', methods=['GET', 'POST'])
 def generate_invoice():
@@ -28,8 +30,8 @@ def generate_invoice():
         template_path = 'Template.jpeg'  # Replace with your template image path
         img = Image.open(template_path)
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype('arial.ttf', size=20)  # Replace 'arial.ttf' with your font file and adjust size
-
+        # Replace 'arial.ttf' with your font file and adjust size
+        font = ImageFont.truetype('arial.ttf', size=20)
 
         # Map data to positions on the template
         draw.text((300, 440), f"{invoice_number}", fill="black", font=font)
@@ -61,6 +63,18 @@ def generate_invoice():
         # draw.text((700, y), "Grand Total:", fill="black", font=font)
         draw.text((900, 1105), f"{grand_total:.2f}", fill="black", font=font)
 
+        # Add signature if uploaded
+        if 'signature' in request.files:
+            signature_file = request.files['signature']
+            if signature_file.filename != '':
+                signature_img = Image.open(signature_file)
+                # Resize the signature if needed
+                signature_img = signature_img.resize(
+                    (150, 50))  # Adjust size as needed
+                # Paste the signature onto the invoice
+                # Adjust position as needed
+                img.paste(signature_img, (750, 1150), mask=signature_img)
+
         # Save image to buffer
         buffer = BytesIO()
         img.save(buffer, format="PNG")
@@ -68,6 +82,7 @@ def generate_invoice():
         return send_file(buffer, as_attachment=True, download_name="invoice.png", mimetype='image/png')
 
     return render_template('generate.html')
+
 
 @app.route('/template', methods=['GET', 'POST'])
 def edit_template():
@@ -82,6 +97,7 @@ def edit_template():
         return f"Template '{template_name}' saved successfully!"
 
     return render_template('edit_template.html')
+
 
 @app.route('/find_positions', methods=['GET', 'POST'])
 def find_positions():
@@ -100,7 +116,8 @@ def find_positions():
         font = ImageFont.load_default()
         for x in range(0, img.width, 100):
             for y in range(0, img.height, 100):
-                draw.text((x + 5, y + 5), f"({x},{y})", fill="black", font=font)
+                draw.text((x + 5, y + 5),
+                          f"({x},{y})", fill="black", font=font)
 
         # Save image to buffer
         buffer = BytesIO()
@@ -109,6 +126,7 @@ def find_positions():
         return send_file(buffer, as_attachment=True, download_name="coordinate_grid.png", mimetype='image/png')
 
     return render_template('find_positions.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
