@@ -27,7 +27,7 @@ def generate_invoice():
         date = request.form['date']
 
         # Load the template image
-        template_path = 'Template.jpeg'  # Replace with your template image path
+        template_path = 'Template.png'  # Replace with your template image path
         img = Image.open(template_path)
         draw = ImageDraw.Draw(img)
         # Replace 'arial.ttf' with your font file and adjust size
@@ -102,7 +102,7 @@ def edit_template():
 @app.route('/find_positions', methods=['GET', 'POST'])
 def find_positions():
     if request.method == 'POST':
-        template_path = 'Template.jpeg'  # Replace with your template image path
+        template_path = 'Template.png'  # Replace with your template image path
         img = Image.open(template_path)
         draw = ImageDraw.Draw(img)
 
