@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Generate Invoice</title>
+</head>
+<body>
+    <h1>Generate Invoice</h1>
+    <form action="/generate" method="post">
+        <label for="invoice_number">Invoice Number:</label>
+        <input type="text" id="invoice_number" name="invoice_number" required><br><br>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="customer_name">Customer Name:</label>
+        <input type="text" id="customer_name" name="customer_name" required><br><br>
+
+
+        <div id="items">
+            <h3>Items:</h3>
+            <div class="item">
+                <label for="item[]">Item:</label>
+                <input type="text" name="item[]" required>
+                <label for="quantity[]">Quantity:</label>
+                <input type="number" name="quantity[]" required>
+                <label for="price[]">Price:</label>
+                <input type="number" step="0.01" name="price[]" required>
+            </div>
+        </div>
+        <button type="button" onclick="addItem()">Add Another Item</button><br><br>
+
+        <button type="submit">Generate Invoice</button>
+    </form>
+
+    <script>
+        function addItem() {
+            const itemsDiv = document.getElementById('items');
+            const newItem = document.createElement('div');
+            newItem.className = 'item';
+            newItem.innerHTML = `
+                <label for="item[]">Item:</label>
+                <input type="text" name="item[]" required>
+                <label for="quantity[]">Quantity:</label>
+                <input type="number" name="quantity[]" required>
+                <label for="price[]">Price:</label>
+                <input type="number" step="0.01" name="price[]" required>
+            `;
+            itemsDiv.appendChild(newItem);
+        }
+    </script>
+</body>
+</html>
